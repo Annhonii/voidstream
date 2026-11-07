@@ -107,7 +107,9 @@ data class NotificationItem(
     /** The video is a Short (play it in the Shorts player). */
     val short: Boolean = false,
     /** Id of the comment this notification is about (comment / reply / mention). */
-    val commentId: String = ""
+    val commentId: String = "",
+    /** Address (or endpoint type) YouTube gave for this notification; only used to explain what could not be opened. */
+    val url: String = ""
 )
 
 data class LocalPlaylist(

@@ -794,8 +794,11 @@
       var m;
       if (!vid && url && (m = url.match(/[?&]v=([\w-]{11})/) || url.match(/\/shorts\/([\w-]{11})/))) vid = m[1];
       var isShort = !!(ep.reelWatchEndpoint || /^\/shorts\//.test(url));
-      var lcm = url.match(/[?&]lc=([\w.-]+)/);
+      var lcm = url.match(/[?&]lc=([\w.-]+)/) || (JSON.stringify(n).match(/[?&]lc=([\w.-]+)/));
       if (!vid) { var fv = findFirst(ep, 'videoId'); if (typeof fv === 'string' && fv.length === 11) vid = fv; }
+      var raw = '';
+      try { raw = JSON.stringify(n); } catch (e0) { raw = ''; }
+      if (!vid && (m = raw.match(/"videoId":"([\w-]{11})"/) || raw.match(/[?&]v=([\w-]{11})/) || raw.match(/\/shorts\/([\w-]{11})/))) vid = m[1];
       var thumb = lastThumb(n.videoThumbnail);
       if (!vid && thumb && (m = thumb.match(/\/vi\/([\w-]{11})\//))) vid = m[1];
       var chId = (ep.browseEndpoint && typeof ep.browseEndpoint.browseId === 'string' && ep.browseEndpoint.browseId.indexOf('UC') === 0)
@@ -817,7 +820,7 @@
       seen[id] = 1;
       items.push({
         t: 'n', id: id, msg: msg, time: txt(n.sentTimeText), avatar: lastThumb(n.thumbnail), thumb: thumb,
-        read: !!n.read, kind: kind, vid: vid, chId: chId, handle: handle, short: isShort, lc: lcm ? lcm[1] : ''
+        read: !!n.read, kind: kind, vid: vid, chId: chId, handle: handle, short: isShort, lc: lcm ? lcm[1] : '', url: url || (ep.commandMetadata ? '' : Object.keys(ep).join(','))
       });
       return true;
     });

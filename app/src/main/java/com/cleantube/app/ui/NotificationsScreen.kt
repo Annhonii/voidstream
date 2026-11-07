@@ -71,6 +71,7 @@ private fun NotificationItem.isMention() = kind == "comment" || kind == "reply" 
 @Composable
 fun NotificationsScreen() {
     val nav = LocalNav.current
+    val ctx = androidx.compose.ui.platform.LocalContext.current
 
     Column(Modifier.fillMaxSize()) {
         TabTopBar("Notification")
@@ -106,6 +107,10 @@ fun NotificationsScreen() {
                         VideoItem(id = n.videoId, title = n.message, channelId = n.channelId, short = true)
                     )
                     n.videoId.isNotEmpty() -> nav.push(Route.Video(n.videoId))
+                    n.isMention() -> android.widget.Toast.makeText(
+                        ctx, "Couldn't find the video of this notification" + (if (n.url.isNotEmpty()) " (${n.url.take(80)})" else ""),
+                        android.widget.Toast.LENGTH_LONG
+                    ).show()
                     n.channelId.isNotEmpty() -> nav.push(Route.Channel(n.channelId))
                     n.handle.isNotEmpty() -> nav.push(Route.Channel(id = "", handle = n.handle))
                 }

@@ -183,7 +183,8 @@ object Api {
         channelId = optString("chId"),
         handle = optString("handle"),
         short = optBoolean("short"),
-        commentId = optString("lc")
+        commentId = optString("lc"),
+        url = optString("url")
     )
 
     /** YouTube's notification bell of the signed-in account: new uploads, live, comments, replies, mentions... */
